@@ -370,8 +370,8 @@ The Pico has **2MB** of flash storage:
 Now that you've flashed your Pico:
 
 1. **Try Example Scripts** - Run the provided examples
-   - [01_blink.py](../../src/pico_scripts/01_blink.py)
-   - [02_wifi_connect.py](../../src/pico_scripts/02_wifi_connect.py)
+   - `src/pico_scripts/01_blink.py`
+   - `src/pico_scripts/02_wifi_connect.py`
 
 2. **Explore MicroPython** - Learn the differences from standard Python
    - [MicroPython Documentation](https://docs.micropython.org/)

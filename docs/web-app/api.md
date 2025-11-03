@@ -57,7 +57,7 @@ Get API status and uptime.
 
 ## Usage Examples
 
-See [examples/api_client.py](../../examples/api_client.py) for a complete Python client.
+See `examples/api_client.py` for a complete Python client.
 
 **Quick Example:**
 ```python

@@ -121,4 +121,4 @@ led.off()  # Should turn off
 
 ## Reference
 
-See full source code: [src/pico_scripts/01_blink.py](../../../src/pico_scripts/01_blink.py)
+See full source code: `src/pico_scripts/01_blink.py`
