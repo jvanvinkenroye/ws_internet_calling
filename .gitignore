@@ -8,3 +8,22 @@ wheels/
 
 # Virtual environments
 .venv
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# MkDocs
+site/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Local configuration
+.env
+.claude/settings.local.json

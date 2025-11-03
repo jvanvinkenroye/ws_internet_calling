@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nummernsender - Number Transmitter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Nummernsender</h1>
+            <p class="subtitle">Automatic Number Transmitter</p>
+        </header>
+
+        <main>
+            <div class="number-display">
+                <div id="current-number" class="number">1</div>
+            </div>
+
+            <div class="controls">
+                <button id="start-btn" class="btn btn-primary">Start</button>
+                <button id="stop-btn" class="btn btn-secondary" disabled>Stop</button>
+                <button id="reset-btn" class="btn btn-tertiary">Reset</button>
+            </div>
+
+            <div class="info">
+                <p>Status: <span id="status">Stopped</span></p>
+                <p>Rotation: <span id="rotation-count">0</span> cycles</p>
+            </div>
+        </main>
+
+        <footer>
+            <p>Numbers rotate from 1 to 9 every second</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

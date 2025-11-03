@@ -1,0 +1,122 @@
+site_name: Nummernsender im Internet - Seminar Documentation
+site_description: Comprehensive guide for the Nummernsender (Number Transmitter) seminar project with Raspberry Pi Pico
+site_author: Seminar Project Team
+site_url: https://example.com
+
+# Repository
+repo_name: nummernsender-seminar
+repo_url: https://github.com/yourusername/nummernsender-seminar
+edit_uri: edit/main/docs/
+
+# Theme configuration
+theme:
+  name: material
+  language: de
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+  icon:
+    repo: fontawesome/brands/github
+
+# Extensions
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - tables
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+# Plugins
+plugins:
+  - search:
+      lang: de
+  - mkdocs-get-deps
+
+# Navigation structure
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Overview: getting-started/overview.md
+      - Prerequisites: getting-started/prerequisites.md
+      - Quick Start: getting-started/quickstart.md
+  - Installation Guides:
+      - Thonny IDE: guides/thonny_installation.md
+      - Raspberry Pi Pico Flashing: guides/pico_flashing.md
+  - Web Applications:
+      - Number Transmitter Web App: web-app/web-app.md
+      - Number Transmitter API: web-app/api.md
+      - Running the Applications: web-app/running.md
+  - Raspberry Pi Pico:
+      - Introduction: pico/introduction.md
+      - Basic Examples:
+          - LED Blink: pico/examples/blink.md
+          - WiFi Connection: pico/examples/wifi-connect.md
+          - Signal Monitor: pico/examples/signal-monitor.md
+          - Signal to Blink: pico/examples/signal-to-blink.md
+          - API Consumer: pico/examples/api-consumer.md
+          - Access Point: pico/examples/access-point.md
+  - Troubleshooting:
+      - Common Issues: troubleshooting/common_issues.md
+      - FAQ: troubleshooting/faq.md
+  - Reference:
+      - API Documentation: reference/api.md
+      - Code Examples: reference/examples.md
+      - Resources: reference/resources.md
+
+# Extra CSS/JS
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/extra.js
+
+# Footer
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/yourusername
+      name: GitHub
+  generator: false
+
+# Copyright
+copyright: Copyright &copy; 2025 Seminar Project - Nummernsender im Internet
