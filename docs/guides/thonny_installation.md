@@ -307,8 +307,8 @@ pip3 install --upgrade thonny
 After successfully installing Thonny:
 
 1. **[Flash Raspberry Pi Pico](pico_flashing.md)** - Set up your Pico with MicroPython
-2. **[Run Example Scripts](../examples.md)** - Try the sample code
-3. **[Troubleshooting](troubleshooting.md)** - Solutions to common problems
+2. **[Run Example Scripts](../pico/introduction.md)** - Try the sample code
+3. **[Troubleshooting](../troubleshooting/common_issues.md)** - Solutions to common problems
 
 ---
 
@@ -325,6 +325,6 @@ After successfully installing Thonny:
 
 If you encounter issues not covered in this guide:
 
-1. Check the [Troubleshooting Guide](troubleshooting.md)
+1. Check the [Troubleshooting Guide](../troubleshooting/common_issues.md)
 2. Visit the [Thonny Forum](https://github.com/thonny/thonny/discussions)
 3. Check the [Raspberry Pi Forums](https://forums.raspberrypi.com/)

@@ -78,7 +78,7 @@ This is the easiest method for beginners.
 
 **Result**: The Pico appears as a USB drive named "RPI-RP2"
 
-![BOOTSEL Button Location](../images/bootsel_button.png)
+*The BOOTSEL button is a small white button located near the USB port on the Pico board.*
 
 ### Step 2: Flash Firmware via Thonny
 
@@ -316,7 +316,7 @@ In Thonny:
 1. Try a different USB cable (must be data cable, not charge-only)
 2. Try a different USB port
 3. Make sure you're holding BOOTSEL while connecting
-4. Check [Troubleshooting Guide](troubleshooting.md)
+4. Check [Troubleshooting Guide](../troubleshooting/common_issues.md)
 
 ### Upload Failed
 
@@ -394,4 +394,4 @@ Now that you've flashed your Pico:
 
 ## Troubleshooting
 
-For more detailed troubleshooting, see the [Troubleshooting Guide](troubleshooting.md).
+For more detailed troubleshooting, see the [Troubleshooting Guide](../troubleshooting/common_issues.md).
