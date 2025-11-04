@@ -194,6 +194,141 @@ pip3 install thonny
 thonny &
 ```
 
+### Installing via Snap (Ubuntu and Snap-enabled Distributions)
+
+Snap is a universal package manager available on Ubuntu and many other Linux distributions. Installing Thonny via snap is convenient, but requires an additional step to enable USB access.
+
+#### Installation Steps
+
+```bash
+# Install Thonny from Snap Store
+sudo snap install thonny
+
+# Launch Thonny
+thonny &
+```
+
+#### **CRITICAL: Enable USB Access for Snap**
+
+By default, snap applications run in a sandboxed environment and **cannot access USB devices**. You **must** connect the `raw-usb` interface to allow Thonny to communicate with your Raspberry Pi Pico:
+
+```bash
+# Connect the raw-usb interface (required for USB serial communication)
+sudo snap connect thonny:raw-usb
+
+# Verify the connection
+snap connections thonny | grep raw-usb
+```
+
+You should see output similar to:
+```
+raw-usb              thonny:raw-usb             :raw-usb                -
+```
+
+#### **Connecting to Raspberry Pi Pico via USB**
+
+After enabling USB access:
+
+1. **Connect your Pico**
+   - Plug your Raspberry Pi Pico into a USB port using a data cable (not power-only)
+   - The Pico should be recognized by the system
+
+2. **Verify USB Detection**
+   ```bash
+   # Check if the Pico is detected
+   ls -l /dev/ttyACM*
+   # You should see something like: /dev/ttyACM0
+
+   # Or check USB devices
+   lsusb | grep "2e8a"
+   # Should show: "Raspberry Pi RP2 Boot" or "MicroPython Board"
+   ```
+
+3. **Configure Thonny for Pico**
+   - Launch Thonny
+   - Go to `Tools` → `Options` → `Interpreter`
+   - Select **"MicroPython (Raspberry Pi Pico)"**
+   - Port should auto-detect as `/dev/ttyACM0` (or similar)
+   - Click **"OK"**
+
+4. **Verify Connection**
+   - You should see `>>>` prompt in the Shell panel at the bottom
+   - Bottom-right corner should show "MicroPython" and the port
+   - Try typing: `print("Hello Pico!")` in the Shell
+
+#### **Snap-Specific Troubleshooting**
+
+**Issue: Thonny doesn't detect the Pico after snap installation**
+
+This is almost always due to missing USB permissions. Solutions:
+
+```bash
+# 1. Ensure raw-usb interface is connected
+sudo snap connect thonny:raw-usb
+
+# 2. Add your user to dialout and tty groups
+sudo usermod -a -G dialout $USER
+sudo usermod -a -G tty $USER
+
+# 3. Log out and log back in (or reboot)
+# This is necessary for group changes to take effect
+
+# 4. Verify group membership
+groups
+# Should include: dialout tty
+
+# 5. Check snap interface connections
+snap connections thonny
+
+# 6. Restart snap services (if still not working)
+sudo systemctl restart snapd
+```
+
+**Issue: "Permission denied" error when accessing /dev/ttyACM0**
+
+```bash
+# Check device permissions
+ls -l /dev/ttyACM0
+
+# Should show group ownership as 'dialout'
+# If you're not in the dialout group, add yourself:
+sudo usermod -a -G dialout $USER
+
+# Create udev rule for Pico (if needed)
+sudo tee /etc/udev/rules.d/99-pico.rules > /dev/null <<EOF
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="2e8a", MODE:="0666", GROUP="dialout"
+EOF
+
+# Reload udev rules
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+
+# Unplug and replug the Pico
+```
+
+**Issue: Snap version is outdated**
+
+```bash
+# Update Thonny snap to latest version
+sudo snap refresh thonny
+
+# Or switch to a different channel (e.g., latest/edge for newer features)
+sudo snap refresh thonny --channel=latest/edge
+```
+
+**Issue: Need to remove snap version and use apt instead**
+
+If snap version continues to have USB issues, you can switch to apt:
+
+```bash
+# Remove snap version
+sudo snap remove thonny
+
+# Install via apt
+sudo apt update
+sudo apt install thonny -y
+```
+
 ### Linux Troubleshooting
 
 **Issue: Permission denied when accessing USB/serial ports**
