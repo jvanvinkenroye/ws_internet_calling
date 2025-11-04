@@ -2,11 +2,15 @@
 
 REST API for machine-readable access to the number transmission system.
 
+**Note:** The API is now part of the combined application running on port 5555.
+
 ## Base URL
 
 ```
-http://localhost:5001
+http://localhost:5555
 ```
+
+Previously: `http://localhost:5001` (deprecated - old standalone API)
 
 ## Endpoints
 
@@ -51,19 +55,36 @@ Get API status and uptime.
   "uptime_seconds": 123.456,
   "current_number": 5,
   "api_version": "1.0.0",
-  "service": "number-transmitter-api"
+  "service": "number-transmitter-combined"
+}
+```
+
+### GET /health
+
+Health check endpoint for monitoring.
+
+**Response:**
+```json
+{
+  "status": "healthy",
+  "service": "number-transmitter-combined"
 }
 ```
 
 ## Usage Examples
 
-See `examples/api_client.py` for a complete Python client.
+See `examples/api_client.py` for a complete Python client (update to use port 5555).
 
 **Quick Example:**
 ```python
 import requests
 
-response = requests.get('http://localhost:5001/api/number')
+# Use port 5555 for the combined application
+response = requests.get('http://localhost:5555/api/number')
 data = response.json()
 print(f"Current number: {data['number']}")
 ```
+
+**CORS Support:**
+
+The API has CORS enabled, allowing cross-origin requests from web applications and IoT devices.
