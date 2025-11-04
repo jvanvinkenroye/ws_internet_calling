@@ -71,52 +71,47 @@ uv add flask flask-cors requests mkdocs mkdocs-material
 pip install flask flask-cors requests mkdocs mkdocs-material
 ```
 
-## Step 4: Run the Web Application
+## Step 4: Run the Combined Application
 
-### Start the Web App
+### Start the App
 
-**Terminal 1:**
+**Terminal:**
 ```bash
 # Make sure venv is activated
-cd src/web_app
-python app.py
+python src/web_app/app.py
 ```
 
 You should see:
 ```
- * Running on http://0.0.0.0:5000
+Starting Number Transmitter Combined Application
+Web Interface:
+  Local:   http://localhost:5555
+  Network: http://<your-ip>:5555
+
+API Endpoints:
+  Current Number: http://localhost:5555/api/number
+  Sequence Info:  http://localhost:5555/api/sequence
+  API Status:     http://localhost:5555/api/status
+  Health Check:   http://localhost:5555/health
 ```
 
-**Test it:**
-- Open browser to [http://localhost:5000](http://localhost:5000)
+**Test the Web Interface:**
+- Open browser to [http://localhost:5555](http://localhost:5555)
 - You should see the Number Transmitter interface
 - Click "Start" to begin number rotation
+- Try the "Server Sync Mode" checkbox to sync with the API
 
-### Start the API (Optional)
-
-**Terminal 2:**
-```bash
-# Make sure venv is activated
-cd src/api
-python app.py
-```
-
-You should see:
-```
- * Running on http://0.0.0.0:5001
-```
-
-**Test it:**
-- Open browser to [http://localhost:5001/api/number](http://localhost:5001/api/number)
+**Test the API:**
+- Open browser to [http://localhost:5555/api/number](http://localhost:5555/api/number)
 - You should see JSON response with current number
+- Visit [http://localhost:5555/api/status](http://localhost:5555/api/status) for API status
 
 ## Step 5: Test the API Client
 
-**Terminal 3:**
+**New Terminal:**
 ```bash
 # Make sure venv is activated
-cd examples
-python api_client.py --current
+python examples/api_client.py --current
 ```
 
 You should see:
@@ -126,14 +121,16 @@ Timestamp: 2025-01-15T10:30:45.123456
 Total Cycles: 12345
 ```
 
+**Note:** The API client will need to be updated to use port 5555 instead of 5001. Edit `examples/api_client.py` and change the default port if needed.
+
 ### Monitor the API
 
 ```bash
 # Monitor for 30 seconds
-python api_client.py --monitor --duration 30
+python examples/api_client.py --monitor --duration 30
 
 # Get API status
-python api_client.py --status
+python examples/api_client.py --status
 ```
 
 ## Step 6: View Documentation
@@ -156,17 +153,17 @@ OSError: [Errno 48] Address already in use
 
 **Solution:**
 ```bash
-# Find and kill process on port 5000
+# Find and kill process on port 5555
 # macOS/Linux
-lsof -ti:5000 | xargs kill -9
+lsof -ti:5555 | xargs kill -9
 
 # Windows
-netstat -ano | findstr :5000
+netstat -ano | findstr :5555
 taskkill /PID <PID> /F
 
 # Or use different port
-# Edit app.py and change:
-app.run(port=5002)  # Use any available port
+# Edit src/web_app/app.py and change the port variable:
+port = 5556  # Use any available port
 ```
 
 ### Module Not Found
@@ -209,7 +206,7 @@ uv add flask flask-cors
 ### For Web Development
 - [Web Application Documentation](../web-app/web-app.md)
 - [API Documentation](../web-app/api.md)
-- Explore the code in `src/web_app/` and `src/api/`
+- Explore the combined app code in `src/web_app/`
 
 ### For IoT/Pico Development
 - [Install Thonny IDE](../guides/thonny_installation.md)
@@ -225,12 +222,15 @@ uv add flask flask-cors
 
 Verify everything works:
 
-- [ ] Web app runs on http://localhost:5000
+- [ ] Combined app runs on http://localhost:5555
+- [ ] Web interface displays at http://localhost:5555
 - [ ] Number display shows and rotates
 - [ ] Start/Stop/Reset buttons work
-- [ ] API runs on http://localhost:5001
-- [ ] API returns JSON at http://localhost:5001/api/number
-- [ ] API client can fetch current number
+- [ ] Server Sync Mode checkbox toggles sync
+- [ ] API returns JSON at http://localhost:5555/api/number
+- [ ] API status available at http://localhost:5555/api/status
+- [ ] Health check responds at http://localhost:5555/health
+- [ ] API client can fetch current number (update port if needed)
 - [ ] MkDocs documentation serves on http://localhost:8000
 
 ## Project Structure Quick Reference
@@ -238,12 +238,12 @@ Verify everything works:
 ```
 ws_internet_calling/
 ├── src/
-│   ├── web_app/          # Flask web application
-│   │   ├── app.py        # Main Flask app
+│   ├── web_app/          # Combined Flask application (Web + API)
+│   │   ├── app.py        # Main Flask app (includes API endpoints)
 │   │   ├── templates/    # HTML templates
 │   │   └── static/       # CSS, JS, images
-│   ├── api/              # REST API
-│   │   └── app.py        # API endpoints
+│   ├── api/              # Legacy API (deprecated - now part of web_app)
+│   │   └── app.py        # Old API endpoints (use web_app instead)
 │   └── pico_scripts/     # Raspberry Pi Pico programs
 ├── examples/
 │   └── api_client.py     # API client example
@@ -273,17 +273,19 @@ If you run into issues:
 source .venv/bin/activate  # macOS/Linux
 .venv\Scripts\activate     # Windows
 
-# Run web app
+# Run combined app (Web + API on port 5555)
 python src/web_app/app.py
 
-# Run API
-python src/api/app.py
-
-# Run API client
+# Run API client (may need port update to 5555)
 python examples/api_client.py --current
 
 # Serve documentation
 mkdocs serve
+
+# Test API endpoints
+curl http://localhost:5555/api/number
+curl http://localhost:5555/api/status
+curl http://localhost:5555/health
 
 # Deactivate venv
 deactivate
