@@ -47,6 +47,86 @@
         </footer>
     </div>
 
+    <!-- Code Examples Section -->
+    <div class="container examples-container">
+        <h2>Raspberry Pi Pico W Examples</h2>
+        <p class="examples-subtitle">Interactive code examples for working with the Number Transmitter API</p>
+
+        <div class="examples-grid">
+            {% for example in examples %}
+            <div class="example-card">
+                <div class="example-header">
+                    <h3>{{ example.title }}</h3>
+                    <p class="example-description">{{ example.description }}</p>
+                </div>
+
+                <div class="example-actions">
+                    <button class="btn btn-view" onclick="toggleCode('{{ example.id }}')">
+                        <span class="btn-icon">👁️</span> View Code
+                    </button>
+                    <a href="{{ url_for('download_example', filename=example.filename) }}"
+                       class="btn btn-download" download>
+                        <span class="btn-icon">⬇️</span> Download
+                    </a>
+                </div>
+
+                <div id="code-{{ example.id }}" class="code-container" style="display: none;">
+                    <div class="code-header">
+                        <span class="filename">{{ example.filename }}</span>
+                        <button class="btn-copy" onclick="copyCode('{{ example.id }}')">
+                            <span class="btn-icon">📋</span> Copy
+                        </button>
+                    </div>
+                    <pre><code class="language-python">{{ example.code }}</code></pre>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="usage-info">
+            <h3>How to Use These Examples</h3>
+            <ol>
+                <li>Download the example you want to try</li>
+                <li>Open it in Thonny IDE</li>
+                <li>Update the WiFi credentials (WIFI_SSID and WIFI_PASSWORD)</li>
+                <li>For API consumer examples, update the API_BASE_URL with your server's IP</li>
+                <li>Upload to your Raspberry Pi Pico W and run!</li>
+            </ol>
+        </div>
+    </div>
+
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        function toggleCode(exampleId) {
+            const codeElement = document.getElementById('code-' + exampleId);
+            const button = event.target.closest('button');
+
+            if (codeElement.style.display === 'none') {
+                codeElement.style.display = 'block';
+                button.innerHTML = '<span class="btn-icon">🙈</span> Hide Code';
+            } else {
+                codeElement.style.display = 'none';
+                button.innerHTML = '<span class="btn-icon">👁️</span> View Code';
+            }
+        }
+
+        function copyCode(exampleId) {
+            const codeElement = document.querySelector('#code-' + exampleId + ' code');
+            const text = codeElement.textContent;
+
+            navigator.clipboard.writeText(text).then(function() {
+                const button = event.target.closest('button');
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<span class="btn-icon">✅</span> Copied!';
+
+                setTimeout(function() {
+                    button.innerHTML = originalHTML;
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Failed to copy:', err);
+                alert('Failed to copy code to clipboard');
+            });
+        }
+    </script>
 </body>
 </html>
