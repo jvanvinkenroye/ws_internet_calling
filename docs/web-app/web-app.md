@@ -10,10 +10,12 @@ The web application provides a visual representation of the number transmission 
 
 - **Automatic Number Rotation**: Numbers change from 1 to 9 every second
 - **Interactive Controls**: Start, Stop, and Reset functionality
+- **Server Sync Mode**: Optional synchronization with server-side API rotation
 - **Responsive Design**: Works on desktop, tablet, and mobile devices
 - **Visual Feedback**: Large, animated number display
 - **Cycle Counter**: Tracks complete rotation cycles
 - **Modern UI**: Gradient backgrounds and smooth animations
+- **Combined with API**: Web interface and REST API in one application
 
 ## Architecture
 
@@ -22,22 +24,31 @@ The web application provides a visual representation of the number transmission 
 **File**: `src/web_app/app.py`
 
 ```python
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for API endpoints
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', local_ip=local_ip, port=port)
+
+@app.route('/api/number')
+def get_number():
+    # Returns current number with metadata
+    return jsonify({...})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5555, debug=True)
 ```
 
 The backend serves:
 - HTML template at root route `/`
 - Static files (CSS, JavaScript)
+- REST API endpoints at `/api/*`
 - Health check endpoint at `/health`
+- CORS-enabled for cross-origin requests
 
 ### Frontend
 
@@ -54,14 +65,13 @@ The backend serves:
 # Activate virtual environment
 source .venv/bin/activate
 
-# Navigate to web app directory
-cd src/web_app
-
-# Run the application
-python app.py
+# Run the combined application (from project root)
+python src/web_app/app.py
 ```
 
-Access at: [http://localhost:5000](http://localhost:5000)
+Access at:
+- **Web Interface:** [http://localhost:5555](http://localhost:5555)
+- **API Endpoints:** [http://localhost:5555/api/number](http://localhost:5555/api/number)
 
 ### Production Mode
 
@@ -70,7 +80,7 @@ Access at: [http://localhost:5000](http://localhost:5000)
 uv add gunicorn
 
 # Run with gunicorn
-gunicorn -w 4 -b 0.0.0.0:5000 src.web_app.app:app
+gunicorn -w 4 -b 0.0.0.0:5555 src.web_app.app:app
 ```
 
 ## User Interface
@@ -81,13 +91,16 @@ The central number display shows the current number (1-9) in large, bold text wi
 
 ### Controls
 
-- **Start Button**: Begin automatic number rotation
-- **Stop Button**: Pause the rotation
-- **Reset Button**: Return to number 1 and reset cycle counter
+- **Server Sync Mode Toggle**: Enable/disable synchronization with server API
+  - When enabled: Displays server-side number rotation (disables manual controls)
+  - When disabled: Uses client-side rotation with manual controls
+- **Start Button**: Begin automatic number rotation (manual mode only)
+- **Stop Button**: Pause the rotation (manual mode only)
+- **Reset Button**: Return to number 1 and reset cycle counter (manual mode only)
 
 ### Status Information
 
-- **Current Status**: Running or Stopped
+- **Current Status**: Running, Stopped, or Syncing with Server
 - **Rotation Count**: Number of complete 1-9 cycles
 
 ## Technical Details
@@ -182,11 +195,12 @@ Tested and working on:
 ### Port Already in Use
 
 ```bash
-# Change port in app.py
-app.run(port=5001)
+# Change port in src/web_app/app.py
+port = 5556  # Use any available port
 
 # Or kill existing process
-lsof -ti:5000 | xargs kill -9  # macOS/Linux
+lsof -ti:5555 | xargs kill -9  # macOS/Linux
+netstat -ano | findstr :5555   # Windows (then use taskkill)
 ```
 
 ### Static Files Not Loading
